@@ -105,7 +105,7 @@ def export_remarks(rem_df, f_name, path):
     rem_df.to_excel(final_f) 
     return final_f
 
-# --- totals sheet --- #
+# --- export totals sheet --- #
 def totals_sheet(export_remarks, f_name, path):
     remark_df = export_remarks
     #remove words from numerical columns
@@ -133,7 +133,7 @@ def totals_sheet(export_remarks, f_name, path):
     out_name = str(f_name.split(".", 1)[0]) + '-totals.xlsx'
     final_f = path + '\\' + out_name
     final_totals_df.to_excel(final_f)
-    return final_f
+    return final_f, final_totals_df
 
 # writer = pd.ExcelWriter(str(f_name.split(".", 1)[0]) + ' - processed.xlsx', engine='xlsxwriter')
 # final_remark_df.to_excel(writer, sheet_name='Remarks')

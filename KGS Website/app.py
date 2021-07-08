@@ -3,6 +3,7 @@ import bank_program
 from flask import Flask, flash, request, redirect, url_for, render_template, session, send_file
 from flask_wtf import Form
 from werkzeug.utils import secure_filename
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -60,6 +61,27 @@ def totals_page():
         rem_df = bank_program.generate_remarks(sheet[1], cleaned_sheet)
         f_out = bank_program.totals_sheet(rem_df, str(file_var), out_file_path)
         return send_file(f_out, as_attachment=False)
+    #return render_template('kgs_report.html', msg="Totals file generated!", out_file_path = out_file_path)
+    except:
+        return render_template('kgs_report.html', msg="An error occured while generating totals file! Check general instructions page.")
+
+@app.route('/total_remarks')
+def totals_and_remarks():
+    try:
+        file_var = session['name']
+        in_file_path = os.path.join(APP_ROUTE+"\\uploads_folder", file_var)
+        out_file_path = os.path.join(APP_ROUTE+"\\output_folder")
+        sheet = bank_program.import_file(in_file_path)
+        cleaned_sheet = bank_program.data_clean(sheet[0])
+        rem_df = bank_program.generate_remarks(sheet[1], cleaned_sheet)
+        tot_df = bank_program.totals_sheet(rem_df, str(file_var), out_file_path)[1]
+        out_name = str(file_var.split(".", 1)[0]) + '-rem_totals.xlsx'
+        final_f = out_file_path + '\\' + out_name
+        writer = pd.ExcelWriter(final_f, engine='xlsxwriter')
+        rem_df.to_excel(writer, sheet_name='Remarks')
+        tot_df.to_excel(writer, sheet_name='Totals')
+        writer.save()
+        return send_file(writer, as_attachment=False)
     #return render_template('kgs_report.html', msg="Totals file generated!", out_file_path = out_file_path)
     except:
         return render_template('kgs_report.html', msg="An error occured while generating totals file! Check general instructions page.")

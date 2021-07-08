@@ -38,11 +38,11 @@
         <p class="center">Select an option:</p>
         <br>
         <br>
+        <br>
         <div class="btn-group" style="left: 50%; transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);position: absolute;">
             <button action="#" onclick="window.location.href='{{ url_for( 'remarks_page') }}';">Generate Remarks</button>
             <button action="#" onclick="window.location.href='{{ url_for( 'totals_page') }}';">Generate Totals</button>
-            <button action="#">Entry Resolution (demo)</button>
-            <button action="#">Generate Reconcilation (demo)</button>
+            <button action="#" onclick="window.location.href='{{ url_for( 'totals_and_remarks') }}';">Generate Remarks + Totals</button>
         </div>
     <br><br><br>
     <p class="center">{{msg}}</p>
