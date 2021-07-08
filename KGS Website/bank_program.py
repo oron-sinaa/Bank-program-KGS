@@ -28,27 +28,20 @@ def data_clean(import_file):
     df = import_file
     #remove whitespaces
     df['Particulars'] = df['Particulars'].str.strip()
-
     #convert everything to uppercase
     df['Particulars'] = df['Particulars'].str.upper()
-
     #remove stop words (pre-cleaning)
     pat = '|'.join(r"\b{}\b".format(x) for x in stop_words)
     df['Particulars'] = df['Particulars'].str.replace(pat, '', regex=True)
-
     #add spaces next to special characters
     df['Particulars'] = df['Particulars'].str.replace(r'([^&\w\s])'," \\1", regex=True)
-
     #remove special characters
     df['Particulars'] = df['Particulars'].str.replace(r'([^\w\s\&])',"", regex=True)
-
     #remove alphanumeric and numeric
     df['Particulars'] = df['Particulars'].str.replace('\w+\d+', '', regex=True)
     df['Particulars'] = df['Particulars'].str.replace('\d+', '', regex=True)
-
     #replace na values with single space
     df['Particulars'] = df['Particulars'].fillna(" ")
-
     #modify for specific keywords
     df.loc[df['Particulars'].str.contains('|'.join(['INT', 'INTEREST']), case=False), 'Particulars'] = 'Interest'
     df.loc[df['Particulars'].str.contains('|'.join(['INB', 'EOD']), case=False), 'Particulars'] = 'Interbank Transfer'
@@ -60,20 +53,15 @@ def data_clean(import_file):
     df.loc[df['Particulars'].str.contains('CASH' and 'DEPOSIT', case=False), 'Particulars'] = 'Cash Deposit'
     df.loc[df['Particulars'].str.contains('WCL', case=False), 'Particulars'] = 'Repayment of WDCL'
     df.loc[df['Particulars'].str.contains('BCCALC', case=False), 'Particulars'] = 'Bccalc Recovery Charges'
-
     #remove stop words (post-cleaning)
     pat = '|'.join(r"\b{}\b".format(x) for x in stop_words)
     df['Particulars'] = df['Particulars'].str.replace(pat, '', regex=True)
-
     #remove whitespaces
     df['Particulars'] = df['Particulars'].str.strip()
-    
     #remove multiple spaces
     df['Particulars'] = df['Particulars'].str.replace(' +', ' ', regex=True)
-
     #text formatting
     df['Particulars'] = df['Particulars'].str.title()
-
     #define all unidentified cases
     df = df.applymap(lambda x: '- Unidentified -' if (x == r'(.) ') else x)
     df = df.applymap(lambda x: '- Unidentified -' if isinstance(x, str) and ((not x) or (x.isspace()) or (len(x)==1)) else x)
@@ -85,10 +73,8 @@ def entry_resolution(export_remarks):
     remark_df = export_remarks
     resolution_threshold = 75
     unique_remarks = remark_df['Remarks'].unique().tolist()
-
     #this automatically replaces very similar terms:
     result_pre = process.dedupe(unique_remarks, threshold=90, scorer=fuzz.token_sort_ratio)
-
     resolved_list = []
     for item in result_pre:
         result = process.extractBests(item,
@@ -101,27 +87,30 @@ def entry_resolution(export_remarks):
     resolved_list = sorted(resolved_list)
     return resolved_list
 
-# - export remarks sheet - #
-def export_remarks(import_file, cleaned_sheet, f_name):
+# - generate remarks sheet - #
+def generate_remarks(import_file, cleaned_sheet):
     df = cleaned_sheet
     #change edited column name to 'Remarks'
     df.rename(columns = {'Particulars':'Remarks'}, inplace = True)
     remark_df = pd.merge(import_file, df, on='ID')
-    
     #this automatically replaces very similar terms:
     unique_remarks = remark_df['Remarks'].unique().tolist()
-    process.dedupe(unique_remarks, threshold=90, scorer=fuzz.token_sort_ratio)
-    
-    remark_df.to_excel(str(f_name.split(".", 1)[0]) + '-remarks.xlsx')  
+    process.dedupe(unique_remarks, threshold=95, scorer=fuzz.token_sort_ratio) 
     return remark_df
 
+# - export remarks sheet - #
+def export_remarks(rem_df, f_name, path):
+    out_name = str(f_name.split(".", 1)[0]) + '-remarks.xlsx'
+    final_f = path + '\\' + out_name
+    rem_df.to_excel(final_f) 
+    return final_f
+
 # --- totals sheet --- #
-def totals_sheet(export_remarks, import_file):
+def totals_sheet(export_remarks, f_name, path):
     remark_df = export_remarks
     #remove words from numerical columns
     remark_df['WITHDRAWALS'] = remark_df['WITHDRAWALS'].replace(r'([/\D+/g])',0, regex=True).astype(float)
     remark_df['DEPOSITS'] = remark_df['DEPOSITS'].replace(r'([/\D+/g])',0, regex=True).astype(float)
-
     #remove commmas,blanks from numerical columns
     remark_df['WITHDRAWALS'] = remark_df['WITHDRAWALS'].replace(',', '').astype(float)
     remark_df['DEPOSITS'] = remark_df['DEPOSITS'].replace(',', '').astype(float)
@@ -129,7 +118,6 @@ def totals_sheet(export_remarks, import_file):
     remark_df['DEPOSITS'] = remark_df['DEPOSITS'].fillna(0)
     remark_df['WITHDRAWALS'] = remark_df['WITHDRAWALS'].replace(' ', 0).astype(float)
     remark_df['DEPOSITS'] = remark_df['DEPOSITS'].replace(' ', 0).astype(float)
-
     #total deposits/withdrawal
     sum_dict= {}
     for record in remark_df.values:
@@ -140,10 +128,12 @@ def totals_sheet(export_remarks, import_file):
         sum_dict[remark]['Total withdrawal'] += withdrawal
         deposit = record[remark_df.columns.get_loc('DEPOSITS')]
         sum_dict[remark]['Total deposit'] += deposit
-
     #totals dataframe
     final_totals_df = pd.DataFrame.from_dict(sum_dict, orient ='index')
-    final_totals_df.to_excel(str(import_file.split(".", 1)[0]) + '-totals.xlsx')
+    out_name = str(f_name.split(".", 1)[0]) + '-totals.xlsx'
+    final_f = path + '\\' + out_name
+    final_totals_df.to_excel(final_f)
+    return final_f
 
 # writer = pd.ExcelWriter(str(f_name.split(".", 1)[0]) + ' - processed.xlsx', engine='xlsxwriter')
 # final_remark_df.to_excel(writer, sheet_name='Remarks')
