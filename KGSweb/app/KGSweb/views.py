@@ -13,6 +13,7 @@ app.secret_key = 'kgsfintechconnectkey'
 def upload_file():
     if request.method == 'POST':
         file_var = request.files['file']
+        rel_party_var = request.form['rel_party_htm']
         # If the user does not select a file, the browser submits an empty file without a filename.
         if file_var.filename == '':
             flash('No selected file')
@@ -21,6 +22,7 @@ def upload_file():
             file_var = request.files['file']
             file_var.save(os.path.join(APP_ROUTE+"\\uploads_folder", file_var.filename))
             session['name'] = str(file_var.filename)
+            session['rel_party'] = str(rel_party_var)
             return render_template('kgs_home.html', message="File uploaded!", val = file_var.filename)
 
     return render_template('kgs_home.html', message="Waiting to submit...") 
@@ -88,22 +90,23 @@ def totals_and_remarks():
 
 @app.route('/related_party')
 def related_party():
-    #try:
-    file_var = session['name']
-    in_file_path = os.path.join(APP_ROUTE+"\\uploads_folder", file_var)
-    out_file_path = os.path.join(APP_ROUTE+"\\output_folder")
-    sheet = bank_program.import_file(in_file_path)
-    cleaned_sheet = bank_program.data_clean(sheet[0])
-    rem_df = bank_program.generate_remarks(sheet[1], cleaned_sheet)
-    out_name = str(file_var.split(".", 1)[0]) + '-related_party.xlsx'
-    final_f = out_file_path + '\\' + out_name
-    related_df = bank_program.related_party(['Charges','Abdul'],rem_df)
-    writer = pd.ExcelWriter(final_f, engine='xlsxwriter')
-    related_df.to_excel(writer, sheet_name='Related Party')
-    writer.save()
-    return send_file(writer, as_attachment=False)
-    #except:
-    #    return render_template('kgs_report.html', msg="An error occured while generating related party file! Check general instructions page or ")
+    try:
+        file_var = session['name']
+        rel_party_var = session['rel_party']
+        in_file_path = os.path.join(APP_ROUTE+"\\uploads_folder", file_var)
+        out_file_path = os.path.join(APP_ROUTE+"\\output_folder")
+        sheet = bank_program.import_file(in_file_path)
+        cleaned_sheet = bank_program.data_clean(sheet[0])
+        rem_df = bank_program.generate_remarks(sheet[1], cleaned_sheet)
+        out_name = str(file_var.split(".", 1)[0]) + '-related_party.xlsx'
+        final_f = out_file_path + '\\' + out_name
+        related_df = bank_program.related_party(rel_party_var.split(','),rem_df)
+        writer = pd.ExcelWriter(final_f, engine='xlsxwriter')
+        related_df.to_excel(writer, sheet_name='Related Party')
+        writer.save()
+        return send_file(writer, as_attachment=False)
+    except:
+        return render_template('kgs_home.html', msg="An error occured while generating related party file! Check general instructions page")
 
 if __name__ == '__main__':
     app.secret_key = 'kgsfintechconnectkey'

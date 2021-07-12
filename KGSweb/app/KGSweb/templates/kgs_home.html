@@ -17,9 +17,12 @@
         <br>
         <h2>Upload excel sheet here:</h2>
         <form class="cl_file" method = "POST" action = "{{ url_for('upload_file') }} "enctype = "multipart/form-data">
-            <input type="file" style="margin-top: -10px;margin-left: 10%;margin-bottom: -5px;padding: 10px;" name="file" accept=".xls,.xlsx"/>
+            <input type="file" style="margin-top: -10px; margin-left: 10%; margin-bottom: -15px;padding: 10px;" name="file" accept=".xls,.xlsx"/>
+            <p style="font-weight: normal; font-size: smaller; margin-bottom: 20px;">(Optional) Enter related party names, separate with commas:</p>
+            <input class = "center" style="width: 50%" type="text" name="rel_party_htm" placeholder=" eg: Amar Agro, Blue, Zed"/>
             <br>
-            <input style="color:black; width:100%; background: #39D2B4;" type="submit" />
+            <input style="color:black; width:20%; background: #39D2B4;" type="submit" />
+            <br>
         </form>
         <p style="text-align: center;">
             <b style="color: black;">{{message}}</b>
@@ -36,7 +39,6 @@
     <div>
         <h1 class="center">Prompt 3</h1><br><br>
         <p class="center">Select an option:</p>
-        <br>
         <br>
         <br>
         <div class="btn-group" style="left: 50%; transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);position: absolute;">

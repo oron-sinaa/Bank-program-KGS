@@ -64,9 +64,9 @@ body
 }
 .cl_file
 {
-    border: 1px solid green;
+    
     padding: 5px 20px;
-    width: 15%;
+    width: 50%;
     text-align: center;
     color: black;
     font-weight: bold;
