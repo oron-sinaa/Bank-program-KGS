@@ -1,0 +1,3 @@
+Just double click on "open_this.bat" file.
+
+NOTE: Please download and install Python from "https://www.python.org/downloads/" before running anything.

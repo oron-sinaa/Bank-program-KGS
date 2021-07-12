@@ -1,0 +1,1 @@
+powershell.exe -ExecutionPolicy Bypass -File shell_script.ps1
