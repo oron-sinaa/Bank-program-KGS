@@ -140,13 +140,34 @@ def totals_sheet(export_remarks, f_name, path):
     # writer.save()
 
 def related_party(search_list, df):
+    threshold = 75 #%
     search_list = list(map(lambda x:x.title(), search_list))
     for item in search_list:
         for itemdf in df['Remarks']:
             score = fuzz.token_sort_ratio(item, itemdf)
-            if score > 80:
+            if score > threshold:
                 df.loc[df.Remarks == itemdf, "is Related Party?"] = "Related Party"
     return df
+
+def search_terms(sheet_list, search_terms):
+    # terms to search for separated by commas
+    search_terms = list(map(str, search_terms.split(',')))
+    # sheets to search in
+    sheet_list = sheet_list
+    # sheets to search in; converted into dataframe
+    list_df = list()
+
+    for i in range(len(sheet_list)):
+        list_df.append(pd.read_excel(sheet_list[i]))
+    del sheet_list
+
+    frames = list()
+    for df in list_df:
+        for item in search_terms:
+            df_logic = df[df.apply(lambda row: row.astype(str).str.contains(item, case=False).any(), axis=1)]
+            frames.append(df_logic) 
+    result = pd.concat(frames, ignore_index = True)
+    return result
 
 # if __name__ == "__main__":
 #     f_name = str(input("Enter file name: "))

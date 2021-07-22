@@ -108,6 +108,33 @@ def related_party():
     except:
         return render_template('kgs_home.html', msg="An error occured while generating related party file! Check general instructions page")
 
+@app.route('/add_features', methods = ["GET","POST"])
+def add_features():
+    if request.method == 'POST':
+        file_list = request.files.getlist("multi_files")
+        rel_party_var = request.form['file_list_names']
+        # If the user does not select a file, the browser submits an empty file without a filename.
+        for files in file_list:
+            if files.filename == '':
+                flash('Empty file name selected')
+                return render_template('kgs_addfeatures.html')
+        if file_list:
+            name_list = []
+            file_list = request.files.getlist("file_list_names")
+            for files in file_list:
+                files.save(os.path.join(APP_ROUTE+"\\uploads_folder", files.filename))
+                name_list.append(files.filename)
+            result = bank_program.search_terms(name_list, rel_party_var)
+            out_name = str('variable_search_results.xlsx')
+            final_f = out_file_path + '\\' + out_name
+            writer = pd.ExcelWriter(final_f, engine='xlsxwriter')
+            result.to_excel(writer, sheet_name='Search Results')
+            writer.save()
+            return send_file(writer, as_attachment=False)
+            #return render_template('kgs_addfeatures.html', message="File(s) uploaded!", val = name_list)
+
+    return render_template('kgs_addfeatures.html', message="Waiting to submit...") 
+
 if __name__ == '__main__':
     app.secret_key = 'kgsfintechconnectkey'
     app.run(debug = True)
