@@ -139,6 +139,7 @@ def totals_sheet(export_remarks, f_name, path):
     # final_totals_df.to_excel(writer, sheet_name='Totals')
     # writer.save()
 
+# -generates related party sheet- #
 def related_party(search_list, df):
     threshold = 75 #%
     search_list = list(map(lambda x:x.title(), search_list))
@@ -149,6 +150,36 @@ def related_party(search_list, df):
                 df.loc[df.Remarks == itemdf, "is Related Party?"] = "Related Party"
     return df
 
+# -generates purchase (rate) sheet- #
+def purchase_sheet(f_name):
+    in_sheet = pd.read_excel (f_name)
+    #remove words from numerical columns
+    in_sheet['Quantity'] = in_sheet['Quantity'].replace(r'([/\D+/g])',0, regex=True).astype(float)
+    in_sheet['Rate PU'] = in_sheet['Rate PU'].replace(r'([/\D+/g])',0, regex=True).astype(float)
+    in_sheet['Invoice Amount'] = in_sheet['Invoice Amount'].replace(r'([/\D+/g])',0, regex=True).astype(float)
+    #remove commmas,blanks from numerical columns
+    in_sheet['Quantity'] = in_sheet['Quantity'].replace(',', '').astype(float)
+    in_sheet['Rate PU'] = in_sheet['Rate PU'].replace(',', '').astype(float)
+    in_sheet['Invoice Amount'] = in_sheet['Invoice Amount'].replace(',', '').astype(float)
+    in_sheet['Quantity'] = in_sheet['Quantity'].fillna(0)
+    in_sheet['Rate PU'] = in_sheet['Rate PU'].fillna(0)
+    in_sheet['Invoice Amount'] = in_sheet['Invoice Amount'].fillna(0)
+    in_sheet['Quantity'] = in_sheet['Quantity'].replace(' ', 0).astype(float)
+    in_sheet['Rate PU'] = in_sheet['Rate PU'].replace(' ', 0).astype(float)
+    in_sheet['Invoice Amount'] = in_sheet['Invoice Amount'].replace(' ', 0).astype(float)
+    pd.set_option('display.precision',5)
+    group = in_sheet.groupby(['Description','Vendor Name Reclassified','Unit','Material Type'], as_index=True)
+    # apply stats operation and append columns to result dataframe
+    result = pd.DataFrame()
+    result['Sum of Quantity'] = group.sum()['Quantity']
+    result['Sum of Invoice Amount'] = group.sum()['Invoice Amount']
+    result['Min Rate PU'] = group.min()['Rate PU']
+    result['Max Rate PU'] = group.max()['Rate PU']
+    result['Avg Rate PU'] = group.mean()['Rate PU']
+    result['Diff Rate PU'] = result['Max Rate PU'] - result['Min Rate PU']
+    return result
+
+# -search specific terms- #
 def search_terms(sheet_list, search_terms):
     # terms to search for separated by commas
     search_terms = list(map(str, search_terms.split(',')))
@@ -156,7 +187,6 @@ def search_terms(sheet_list, search_terms):
     sheet_list = sheet_list
     # sheets to search in; converted into dataframe
     list_df = list()
-
     for i in range(len(sheet_list)):
         list_df.append(pd.read_excel(sheet_list[i]))
     del sheet_list
@@ -168,17 +198,3 @@ def search_terms(sheet_list, search_terms):
             frames.append(df_logic) 
     result = pd.concat(frames, ignore_index = True)
     return result
-
-# if __name__ == "__main__":
-#     f_name = str(input("Enter file name: "))
-#     print("File name accepted.")
-#     sheet = import_file(f_name)
-#     print("Sheet imported.")
-#     cleaned_sheet = data_clean(sheet[0])
-#     print("Sheet cleaned.")
-#     resolved_list = entry_resolution(remarks_export)
-#     print("Resolution done.")
-#     remarks_export = export_remarks(sheet[1], cleaned_sheet, f_name)
-#     print("Remarks file exported.")
-#     totals_export = totals_sheet(remarks_export, f_name)
-#     print("Totals file exported.")
