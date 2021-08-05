@@ -1,3 +1,19 @@
+"""
+File:    bank_program.py 
+
+Author:   Mohd Aanis Noor (https://github.com/oron-sinaa) 
+Company:  KG Somani & Co (https://www.kgsomani.com/) 
+Date:     Started Jun 2021
+Partner:  Mansi 
+
+Summary of File: 
+
+This file contains functions that generate several files analyzed
+from provided bank documents. The code as in August 2021 is working
+but still immature.
+"""
+
+
 import pandas as pd
 import numpy as np
 import re
@@ -8,7 +24,9 @@ stop_words = ['BY','FOR','OF','REVERSAL','RETURN','TRANSFER','NEFT','FROM','AGAI
               'JULY','AUG','AUGUST','SEP','SEPT','SEPTEMBER','OCT','OCTOBER','NOV','NOVEMBER','DEC','DECEMBER','CLOSURE',
               'NRTGS','IN','MR','MRS','C','AC','FEES','CASH','WITHDRAWAL','CLG','TRF','REVERSAL','NEFT_IN','NEFT_OUT','NEFT_CHRG',
               'BILLDESK','CREDIT','TRF','TFR','TT','TR','TFRR','TF','TL','MARGIN','ETFR','B/F','T/F','BILL ID','IMPS','DR','TXT',
-              'SFMS','SCBL','SBIN','ICIC','ICICI','HDFC','ORBC','MAHB','HDFC','PUNB','BARB','UTIB','XLSX','BULK']
+              'SFMS','SCBL','SBIN','ICIC','ICICI','HDFC','ORBC','MAHB','HDFC','PUNB','BARB','UTIB','XLSX','BULK','MTFR']
+
+exclude_from_cleaning = ['786','360','365','180']
 
 # - import spreadsheet to work on - #
 def import_file(f_name):
@@ -38,8 +56,9 @@ def data_clean(import_file):
     #remove special characters
     df['Particulars'] = df['Particulars'].str.replace(r'([^\w\s\&])',"", regex=True)
     #remove alphanumeric and numeric
-    df['Particulars'] = df['Particulars'].str.replace('\w+\d+', '', regex=True)
-    df['Particulars'] = df['Particulars'].str.replace('\d+', '', regex=True)
+    if df['Particulars'].any() not in exclude_from_cleaning:
+        df['Particulars'] = df['Particulars'].str.replace('\w+\d+', '', regex=True)
+        df['Particulars'] = df['Particulars'].str.replace('\d+', '', regex=True)
     #replace na values with single space
     df['Particulars'] = df['Particulars'].fillna(" ")
     #modify for specific keywords
@@ -134,10 +153,12 @@ def totals_sheet(export_remarks, f_name, path):
     final_f = path + '\\' + out_name
     final_totals_df.to_excel(final_f)
     return final_f, final_totals_df
-    # writer = pd.ExcelWriter(str(f_name.split(".", 1)[0]) + ' - processed.xlsx', engine='xlsxwriter')
-    # final_remark_df.to_excel(writer, sheet_name='Remarks')
-    # final_totals_df.to_excel(writer, sheet_name='Totals')
-    # writer.save()
+    """
+    writer = pd.ExcelWriter(str(f_name.split(".", 1)[0]) + ' - processed.xlsx', engine='xlsxwriter')
+    final_remark_df.to_excel(writer, sheet_name='Remarks')
+    final_totals_df.to_excel(writer, sheet_name='Totals')
+    writer.save()
+    """
 
 # -generates related party sheet- #
 def related_party(search_list, df):
@@ -152,7 +173,8 @@ def related_party(search_list, df):
 
 # -generates purchase (rate) sheet- #
 def purchase_sheet(f_name):
-    in_sheet = pd.read_excel (f_name)
+    in_sheet = pd.read_excel (f_name, sheet_name='feb purchase', usecols=[
+        'Vendor Name Reclassified','Description','Unit','Quantity','Invoice Amount','Rate PU','Material Type'])
     #remove words from numerical columns
     in_sheet['Quantity'] = in_sheet['Quantity'].replace(r'([/\D+/g])',0, regex=True).astype(float)
     in_sheet['Rate PU'] = in_sheet['Rate PU'].replace(r'([/\D+/g])',0, regex=True).astype(float)

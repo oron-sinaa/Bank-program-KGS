@@ -9,3 +9,4 @@ $env:FLASK_ENV = "development"
 pip install -e .
 python open_web.pyw
 flask run
+Read-Host -Prompt "Press Enter to exit"

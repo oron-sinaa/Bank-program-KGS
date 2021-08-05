@@ -28,13 +28,14 @@
         <p style="text-align: center;">
             <b style="color: black;">{{message}}</b>
         </p>
+        <p class="center" style="color: black;"><b><i>{{ val }}</i></b></p>
+        <br>
         <hr><br>
         <h1 class="center">Prompt 2</h1>
         <br>
         <br>
-        <p class="center">Uploaded file name:</p>
+        
         <br>
-        <p class="center" style="color: black;"><b><i>{{ val }}</i></b></p>
         <br><hr><br>
     </div>
     <div>
@@ -47,6 +48,7 @@
             <button action="#" onclick="window.location.href='{{ url_for('totals_and_remarks') }}';">Remarks + Totals</button>
             <button action="#" onclick="window.location.href='{{ url_for('related_party') }}';">Related Party</button>
             <button action="#" onclick="window.location.href='{{ url_for('purchase_sheet') }}';">Rate Sheet</button>
+            <button action="#" >Random Entries</button>
             <br><br><br>
             <button action="#" class="center" onclick="window.location.href='{{ url_for('add_features') }}';">Go to search terms page</button>
         </div>
@@ -56,9 +58,9 @@
     <div class="footer">
         <hr>
         <p>
-            <a style="color: Blue; font-weight: bolder;" href="{{ url_for('instructions_page') }}">General Instructions</a>&nbsp&nbsp&nbsp&nbsp&nbsp / &nbsp&nbsp&nbsp&nbsp&nbsp
-            <a style="color: Green; font-weight: bolder;" href="{{ url_for('upload_file') }}">Home</a>&nbsp&nbsp&nbsp&nbsp&nbsp / &nbsp&nbsp&nbsp&nbsp&nbsp
-            <a style="color: Red; font-size: x-small;" href="{{ url_for('delete_files') }}">Clear Uploaded Files!
+            <a style="color: Blue; font-weight: normal;" href="{{ url_for('instructions_page') }}">General Instructions</a>&nbsp&nbsp&nbsp&nbsp&nbsp / &nbsp&nbsp&nbsp&nbsp&nbsp
+            <a style="color: Green; font-weight:normal;" href="{{ url_for('upload_file') }}">Home</a>&nbsp&nbsp&nbsp&nbsp&nbsp / &nbsp&nbsp&nbsp&nbsp&nbsp
+            <a style="color: Red; font-size: smaller;" href="{{ url_for('delete_files') }}">Clear Uploaded Files! (no undo)
         </p>
     </div>
 </body>
