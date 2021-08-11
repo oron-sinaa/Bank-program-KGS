@@ -1,0 +1,62 @@
+<html>
+<head>
+    <title>KGS Fintech</title>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+
+<body>
+
+    <div class = "container">
+        <a href="{{ url_for('upload_file') }}">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" width="205" height="45" style="margin-top: 18px; margin-left: 18px;">
+        </a>
+        <h1 style="font-weight: lighter;">" KGS Fintech Portal "</h1>
+    </div>
+    <hr><br>
+
+    <div>
+        <h1 class="center">Prompt 1</h1>    
+        <br>
+        <form class="cl_file" method = "POST" enctype = "multipart/form-data">
+            <h2>Upload Bank Statement here:</h2>
+            <input type="file" style="margin-top: -10px; margin-left: 10%; margin-bottom: -15px;padding: 10px;" name="bank_stmt_file" accept=".xls,.xlsx" value="Upload Bank Statement"/>
+            <br><br><br>
+            <h2>Upload Bank Book here:</h2>
+            <input type="file" style="margin-top: -10px; margin-left: 10%; margin-bottom: -15px;padding: 10px;" name="bank_book_file" accept=".xls,.xlsx"/>
+            <br><br><br>
+            <input style="color:black; width:20%; background: #39D2B4;" type="submit" value="Submit"/>
+            <br>
+        </form>
+        <p style="text-align: center;">
+            <b style="color: black;">{{message}}</b><br>
+            <b style="color: grey; font-weight: light;">Bank Statement: {{val1}}</b><br>
+            <b style="color: grey; font-weight: light;">Bank Book: {{val2}}</b>
+        </p>
+    </div>
+
+    <br><hr><br>
+
+    <div>
+        <h1 class="center">Prompt 2</h1><br><br>
+        <br>
+        <div class="btn-group" style="left: 50%; transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);position: absolute;">
+            <button action="#" onclick="window.location.href='{{ url_for('bb_reconcilation') }}';">Generate Reconciled Report</button>
+        </div>
+    <br><br><br><br>
+    <p class="center" style="color:black;">{{msg}}</p>
+    </div>
+
+    <div class="footer">
+        <hr>
+        <p>
+            <a style="color: Blue; font-weight: normal;" href="{{ url_for('instructions_page') }}">General Instructions</a>&nbsp&nbsp&nbsp&nbsp&nbsp / &nbsp&nbsp&nbsp&nbsp&nbsp
+            <a style="color: Green; font-weight:normal;" href="{{ url_for('upload_file') }}">Home</a>&nbsp&nbsp&nbsp&nbsp&nbsp / &nbsp&nbsp&nbsp&nbsp&nbsp
+            <a style="color: Red; font-size: smaller;" href="{{ url_for('delete_files') }}">Clear Uploaded Files! (no undo)
+        </p>
+    </div>
+
+</body>
+</html>
+
+<!-- onclick="window.location.href='{{ url_for( 'instructions_page') }}'; -->

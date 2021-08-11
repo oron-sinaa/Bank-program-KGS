@@ -41,16 +41,16 @@
     <div>
         <h1 class="center">Prompt 3</h1><br><br>
         <p class="center">Select an action:</p>
-        <br><br><br>
+        <br><br><br><br>
         <div class="btn-group" style="left: 50%; transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);position: absolute;">
             <button action="#" onclick="window.location.href='{{ url_for('remarks_page') }}';">Remarks</button>
             <button action="#" onclick="window.location.href='{{ url_for('totals_page') }}';">Totals</button>
             <button action="#" onclick="window.location.href='{{ url_for('totals_and_remarks') }}';">Remarks + Totals</button>
             <button action="#" onclick="window.location.href='{{ url_for('related_party') }}';">Related Party</button>
             <button action="#" onclick="window.location.href='{{ url_for('purchase_sheet') }}';">Rate Sheet</button>
-            <button action="#" >Random Entries</button>
-            <br><br><br>
-            <button action="#" class="center" onclick="window.location.href='{{ url_for('add_features') }}';">Go to search terms page</button>
+            <button action="#" onclick="window.location.href='{{ url_for('sample_extraction') }}';">Random Entries</button>
+            <button action="#" onclick="window.location.href='{{ url_for('add_features') }}';">Search for terms</button>
+            <button action="#" onclick="window.location.href='{{ url_for('bb_reconcilation_uploader') }}';">Bank Book Reconcilation</button>
         </div>
     <br><br><br><br>
     <p class="center" style="color:black;">{{msg}}</p>
