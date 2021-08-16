@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+
+<head>
+    <meta charset="utf-8">
+    <title>KGS Fintech</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- 
+    Stone Template
+    http://www.templatemo.com/preview/templatemo_452_stone
+    -->
+    <!-- Bootstrap Stylesheet -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    
+    <!-- FontAwesome Icons -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    
+    <!-- Normailize Stylesheet -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/normalize.min.css') }}">
+
+    <!-- Main Styles -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-style.css') }}">
+
+    <!-- Uploader Styles -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/uploader_style.css') }}">
+    
+    <script src="{{ url_for('static', filename='js/vendor/modernizr-2.6.2.min.js') }}"></script>
+</head>
+
+<body  class="loading">
+    <!--[if lt IE 7]>
+    <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- HEADER -->
+    <div class="site-header">
+        <div class="container">
+            <div class="row">
+                <nav class="navbar navbar-default navbar-static-top">
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#main-menu">
+                            <span class="sr-only">Toggle navigation</span>
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <a class="navbar-brand" href="{{ url_for('home') }}">
+                            <img style="height: 75px; width: 160px" src="{{url_for('static', filename='images/KGS_Logo.jpg')}}">
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="main-menu">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="{{ url_for('home') }}" style="color: black; font-weight: bold;">Home</a></li>
+                            <li><a href="{{ url_for('instructions') }}" style="color: black; font-weight: bold;">Instructions</a></li>
+                            
+                        </ul>
+                    </div>
+                </nav>         
+            </div>
+        </div>
+    </div> <!-- .site-header -->
+
+    <div class="uploader_frame">
+        <div class="uploader_center">
+            <div class="uploader_title">
+                <h1 class="uploader_h1">Drop file to upload</h1>
+            </div>
+            <br>
+            <form method = "POST" action = "{{ url_for('samp_extraction') }}" enctype = "multipart/form-data">
+            <div class="uploader_dropzone">
+                <img src="{{url_for('static', filename='images/uploader_cloud.svg')}}" class="uploader_dropzone"/>
+                <input type="file" class="uploader_upload-input" name="uploaded_samples_file" accept=".xls,.xlsx"/>
+                <input type="submit" class="uploader_btn" style="width: 100%;" value="Upload"/>
+            </form>
+            </div>
+            <p>{{ msg1 }}<b>{{ val }}</b>{{ msg2 }}</p>
+            <br><br>
+        </div>
+    </div>
+    <button class="uploader_btn" style="width: 140px; position: relative; left: 45.5%; top: 75%;"  onclick="window.location.href='{{ url_for('samples_generated') }}';">Extract Sample!</button>
+</body>
+
+<script src="{{ url_for('static', filename='js/vendor/jquery-1.10.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>

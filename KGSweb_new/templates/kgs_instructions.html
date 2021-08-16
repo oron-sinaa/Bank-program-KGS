@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+
+<head>
+    <meta charset="utf-8">
+    <title>KGS Fintech</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- 
+    Stone Template
+    http://www.templatemo.com/preview/templatemo_452_stone
+    -->
+    <!-- Bootstrap Stylesheet -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    
+    <!-- FontAwesome Icons -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    
+    <!-- Normailize Stylesheet -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/normalize.min.css') }}">
+
+    <!-- Main Styles -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-style.css') }}">
+
+    <!-- Uploader Styles -->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/uploader_style.css') }}">
+    
+    <script src="{{ url_for('static', filename='js/vendor/modernizr-2.6.2.min.js') }}"></script>
+</head>
+
+<body  class="loading">
+    <!--[if lt IE 7]>
+    <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- HEADER -->
+    <div class="site-header">
+        <div class="container">
+            <div class="row">
+                <nav class="navbar navbar-default navbar-static-top">
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#main-menu">
+                            <span class="sr-only">Toggle navigation</span>
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <a class="navbar-brand" href="{{ url_for('home') }}">
+                            <img style="height: 75px; width: 160px" src="{{url_for('static', filename='images/KGS_Logo.jpg')}}">
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="main-menu">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="{{ url_for('home') }}" style="color: black; font-weight: bold;">Home</a></li>
+                            <li><a href="{{ url_for('instructions') }}" style="color: black; font-weight: bold;">Instructions</a></li>
+                            
+                        </ul>
+                    </div>
+                </nav>         
+            </div>
+        </div>
+    </div> <!-- .site-header -->
+</body>    
+
+<br><br><br><br><br><br><br><br><br><br>
+<i><h2 class="center" style="color:black;"><u><b>General instructions here:</b></u></h2></i>
+<br><br>
+<table align="center" style="color:black;">
+    <tr>
+        <td>1. Do not run the functions without uploading a file</td>
+    </tr>
+    <tr>
+        <td>2. Make sure that there are no empty rows at the beginning of your excel sheet</td>
+    </tr>
+    <tr>
+        <td>3. Make sure that the sheet contains a 'Particulars' column</td>
+    </tr>
+    <tr>
+        <td>4. The column to be used for remarks should exaclty be named as "Particulars"</td>
+    </tr>
+    <tr>
+        <td>5. The column to be used for totals should exaclty be named as "WITHDRAWALS" and "DEPOSITS"</td>
+    </tr>
+    <tr>
+        <td>6. The uploaded file should not be empty</td>
+    </tr>
+    <tr>
+        <td>7. The uploaded file's format should be ".xlsx" or ".xls"</td>
+    </tr>
+</table>  
+
+<script src="{{ url_for('static', filename='js/vendor/jquery-1.10.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
