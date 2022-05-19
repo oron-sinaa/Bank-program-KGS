@@ -1,7 +1,7 @@
 """
 File:    views.py 
 
-Author:   Mansi Gupta 
+Author:   Mohd Aanis Noor & Mansi Gupta 
 Company:  KG Somani & Co (https://www.kgsomani.com/) 
 Date:     Started Jun 2021
 
